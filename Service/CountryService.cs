@@ -26,8 +26,8 @@ namespace PraticeAPi.Service
             var httpResponseMessage = await _httpClientService.GetAsync("https://restcountries.com/v3.1/all");
             if (!httpResponseMessage.IsSuccessStatusCode) return null;
             var data = await httpResponseMessage.Content.ReadAsStringAsync();
-            var obj = JsonConvert.DeserializeObject<IEnumerable<CountryAll.Root>>(data);
-            return obj;
+            var allCountryData = JsonConvert.DeserializeObject<IEnumerable<CountryAll.Root>>(data);
+            return allCountryData;
 
         }
       
@@ -36,8 +36,8 @@ namespace PraticeAPi.Service
             var httpResponseMessage = await _httpClientService.GetAsync($"https://restcountries.com/v3.1/name/{country.Trim()}");
             if (!httpResponseMessage.IsSuccessStatusCode) return null;
             var data = await httpResponseMessage.Content.ReadAsStringAsync();
-            var obj = (JsonConvert.DeserializeObject<IEnumerable<CountryMap.Root>>(data) ?? Array.Empty<CountryMap.Root>()).FirstOrDefault()?.Maps.GoogleMaps;
-            return obj;
+            var googleMapUrl = (JsonConvert.DeserializeObject<IEnumerable<CountryMap>>(data) ?? Array.Empty<CountryMap>()).FirstOrDefault()?.Maps.GoogleMap;
+            return googleMapUrl;
         }
 
         public async Task<SubRegionResultPost> GetCountryBySubRegion(SubRegionPost post)
@@ -45,11 +45,11 @@ namespace PraticeAPi.Service
             var httpResponseMessage = await _httpClientService.GetAsync($"https://restcountries.com/v3.1/subregion/{post.SubRegion.Trim()}");
             if (!httpResponseMessage.IsSuccessStatusCode) return null;
             var data = await httpResponseMessage.Content.ReadAsStringAsync();
-            var obj = JsonConvert.DeserializeObject<IEnumerable<CountrySubregion.Root>>(data);
+            var countrySubregion = JsonConvert.DeserializeObject<IEnumerable<CountrySubregion>>(data);
             var regionResultPost = new SubRegionResultPost
             {
                 SubRegion = post.SubRegion,
-                Countries = (obj ?? Array.Empty<CountrySubregion.Root>()).Select(s => s.Name.Common)
+                Countries = (countrySubregion ?? Array.Empty<CountrySubregion>()).Select(s => s.Name.Common)
             };
             return regionResultPost;
         }

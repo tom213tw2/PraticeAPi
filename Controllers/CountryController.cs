@@ -27,25 +27,24 @@ namespace PraticeAPi.Controllers
         [HttpGet]
         public async Task<IActionResult> All()
         {
-            
-            var str=await _countryService.GetAll();
 
+            var allCountryAllData = await _countryService.GetAll();
 
-            return new JsonResult(str);
+            return new JsonResult(allCountryAllData);
         }
         [HttpGet]
         public async Task<IActionResult> Map(string country)
         {
-            var str = await _countryService.GetCountryMapUrl(country);
-            return string.IsNullOrWhiteSpace(str)
-                ? (IActionResult) new JsonResult(new CountryPostNoFoundStatus())
-                : RedirectPermanent(str);
-        }   
+            var countryMapUrl = await _countryService.GetCountryMapUrl(country);
+            return string.IsNullOrWhiteSpace(countryMapUrl)
+                ? (IActionResult)new JsonResult(new CountryPostNoFoundStatus())
+                : RedirectPermanent(countryMapUrl);
+        }
         [HttpPost]
-        public async Task<IActionResult> GetCountryBySubRegion([FromBody]CountrySunRegionPost.SubRegionPost subRegion)
+        public async Task<IActionResult> GetCountryBySubRegion([FromBody] CountrySunRegionPost.SubRegionPost subRegion)
         {
-            var list =await  _countryService.GetCountryBySubRegion(subRegion);
-            return list!=null ? new JsonResult(list) : new JsonResult(new CountryPostNoFoundStatus());
+            var subRegionList = await _countryService.GetCountryBySubRegion(subRegion);
+            return subRegionList != null ? new JsonResult(subRegionList) : new JsonResult(new CountryPostNoFoundStatus());
         }
     }
 }
