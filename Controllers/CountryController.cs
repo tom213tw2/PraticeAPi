@@ -43,8 +43,8 @@ namespace PraticeAPi.Controllers
         [HttpPost]
         public async Task<IActionResult> GetCountryBySubRegion([FromBody] CountrySunRegionPost.SubRegionPost subRegion)
         {
-            var subRegionList = await _countryService.GetCountryBySubRegion(subRegion);
-            return subRegionList != null ? new JsonResult(subRegionList) : new JsonResult(new CountryPostNoFoundStatus());
+            var GetCountryBySubRegion = await _countryService.GetCountryBySubRegion(subRegion);
+            return GetCountryBySubRegion != null ? new JsonResult(GetCountryBySubRegion) : new JsonResult(new CountryPostNoFoundStatus());
         }
     }
 }
